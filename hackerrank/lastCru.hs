@@ -64,19 +64,12 @@ main = do
     _ <- getLine
     loop m
 
-
 decap (x:xs) = x:map toLower xs
 
 loop :: Array (Int,Int) M -> IO ()
 loop m = do
     [read -> w, read -> h, read . decap -> d] <- words <$> getLine
-     
-    -- hPutStrLn stderr "Debug messages..."
-    
-    -- One line containing the X Y coordinates of the room in which you believe Indy will be on the next turn.
-    
     putStrLn $ intercalate " " . map show . (\[(x,y)] -> [x,y]) . check m $ (d,(w,h))
-    
     loop m
 
 a :: Array (Int,Int) M 

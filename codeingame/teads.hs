@@ -42,16 +42,14 @@ main :: IO ()
 main = do
     hSetBuffering stdout NoBuffering -- DO NOT REMOVE
     
-    -- Auto-generated code below aims at helping you parse
-    -- the standard input according to the problem statement.
-    
     n <- readLn
     
     ns@((i,_):_) <- replicateM n $ (\[x,y] -> (x,y)) <$> map read <$> words <$> getLine
     print $ mkM ns
+    
     let val (T ts) = (`div` 2) . (+1) . sum $ take 2 $ sortBy (flip compare) $ 0:map fst ts
   
     let r = snd .count $  mkT i $ mkM ns
+
     print (val r)
-    return ()  
 

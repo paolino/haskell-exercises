@@ -35,14 +35,12 @@ valid (Env r g p) (S x v) ((/=) J -> c) =
         )
     )
 
-
 mjudge zs e s cs = catMaybes . map judge 
     where
     judge j =   if valid e s' j && not (s' `S.member` zs) 
                 then Just  (j:cs,s') 
                 else Nothing
         where s' = effect j s
-
 
 move :: S.Set S -> Env -> Sol -> [Sol]
 move z e ([],s) = mjudge z e s [] [Sl,W,Sp,J]
@@ -51,11 +49,10 @@ move z e (Sl:cs, s) = mjudge z e s (Sl:cs) [Sl,W,Sp,J]
 move z e (W:cs, s) = mjudge z e s (W:cs) [W,Sp,J]
 move z e (Sp:cs, s) = mjudge z e s (Sp:cs) [Sp,W,J]
 
-
 produce e x = produce' S.empty $ [([],x)] where
     produce' _ [] = [] -- end of search
     produce' zs ns = let
-        ns' = concatMap (move zs e) ns
+        ns' = ns >>= move zs e
         in ns' ++ produce' (foldr S.insert zs $ map snd ns') ns' 
 
 solution e x = reverse <$> fst <$> find (win e . snd) (produce e x)

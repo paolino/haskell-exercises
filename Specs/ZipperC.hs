@@ -1,14 +1,23 @@
 
-{-# language ScopedTypeVariables, ViewPatterns #-}
+{-# language ScopedTypeVariables,FlexibleContexts #-}
+
+module Specs.Zipper where
 
 import Test.Hspec
 import Test.QuickCheck
 import Control.Monad
 import Data.Maybe
 import Data.List
-
+import Control.Arrow hiding (right,left)
+import qualified Data.List.NonEmpty as NE
+import Data.List.NonEmpty (NonEmpty (..))
+import GHC.Exts
 import Specs.Lib
+import Control.Lens
+import Closures
+
 import Solved.ZipperC
+-- import Exercises.Zipper
 
 ---------------------------
 --- test specs

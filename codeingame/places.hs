@@ -4,7 +4,6 @@ import Data.Tuple
 import Data.List
 import Data.Maybe
 
-
 type P = (Int,Int)
 
 border :: [P] -> [P]
