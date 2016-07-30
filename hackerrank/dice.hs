@@ -4,6 +4,7 @@ import Data.Ord
 import Data.Function
 import Control.Monad
 import Control.Applicative
+import Control.Monad.Fix
 
 -- generic 2D building schema with dependency on left and up cell
 table   :: ([t] -> [t]) -- filtering action
@@ -11,11 +12,9 @@ table   :: ([t] -> [t]) -- filtering action
         -> (t -> t) -- dependency from above
         -> t  -- cell @ (0,0)
         -> [[[t]]] -- a table with choices of t as cell
-table c r f a0 = t' where
-    t' = map return (iterate r a0) : map (build c r f) t'
-    build c r f (u:us) = line where
-        line = c (map f u) : zipWith g us line
-        g u l = c $ (f <$> u) ++ (r <$> l)
+table c r f a0 = fix $ (:) (map return $ iterate r a0) . map (build c r f) where
+    build c r f (u:us) = fix $ (:) (c $ map f u) . zipWith g us
+    g u l = c $ (f <$> u) ++ (r <$> l)
 
 type D = [Int] -- a dice (top,right,down,left,front,back)
 d0 = [1,4,6,3,2,5] :: D -- starting dice
